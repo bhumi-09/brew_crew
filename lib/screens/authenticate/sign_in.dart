@@ -30,7 +30,7 @@ class _SignInState extends State<SignIn> {
               dynamic result = await _auth.signInAnon();
 
               if (result == null) {
-                print('##### Error while sign in');
+                print(' Error while sign in');
                  ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(' Geeting error while signed in'),
@@ -40,7 +40,8 @@ class _SignInState extends State<SignIn> {
                   ),
                 );
               } else {
-                print('@@@@@ Signed in successfully ${result}');
+                print(' Signed in successfully ${result}');
+                print('uId ::  ${result.uId}');
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Signed in successfully'),

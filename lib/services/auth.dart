@@ -1,16 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:brew_crew/models/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  //create user obj based on FirebaseUser/User
+  UserModel? _userFromFirebaseUser(User? user) {
+    return user != null ? UserModel(uId: user.uid) : null;
+  }
+
+  //auth change user stream
+  Stream<UserModel?> get user {
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
+  }
 
   // sign in anonymously
   Future signInAnon() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User? user = result.user;
-      return user;
+      return _userFromFirebaseUser(user);
     } catch (e) {
-      print('rror signing in anonymously:  ${e.toString()}');
+      print('Error signing in anonymously:  ${e.toString()}');
       return null;
     }
   }
