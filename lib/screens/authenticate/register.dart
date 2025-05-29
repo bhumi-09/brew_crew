@@ -1,16 +1,16 @@
 import 'package:brew_crew/services/auth.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
-  final Function toggleView;
+class Register extends StatefulWidget {
+ final Function toggleView;
 
-  const SignIn({super.key, required this.toggleView});
+   const Register({super.key, required this.toggleView});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -26,43 +26,13 @@ class _SignInState extends State<SignIn> {
           backgroundColor: Colors.brown,
           elevation: 0,
           title: Text(
-            'Sign in to Brew Crew',
+            'Register to Brew Crew',
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
         ),
         body: Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-            //   child: ElevatedButton(
-            //       onPressed: () async {
-            //         dynamic result = await _auth.signInAnon();
-
-            //         if (result == null) {
-            //           print(' Error while sign in');
-            //            ScaffoldMessenger.of(context).showSnackBar(
-            //             SnackBar(
-            //               content: Text(' Geeting error while signed in'),
-            //               backgroundColor: Colors.red,
-            //               behavior: SnackBarBehavior.floating,
-            //               duration: Duration(seconds: 5),
-            //             ),
-            //           );
-            //         } else {
-            //           print(' Signed in successfully ${result}');
-            //           print('uId ::  ${result.uId}');
-            //           ScaffoldMessenger.of(context).showSnackBar(
-            //             SnackBar(
-            //               content: Text('Signed in successfully'),
-            //               backgroundColor: Colors.green,
-            //               behavior: SnackBarBehavior.floating,
-            //               duration: Duration(seconds: 3),
-            //             ),
-            //           );
-            //         }
-            //       },
-            //       child: Text('Sign In as Guest ')),
-            // ),
-
             child: Form(
               key: _formKey,
               child: Column(
@@ -134,7 +104,7 @@ class _SignInState extends State<SignIn> {
                       }
                     },
                     child: Text(
-                      'Sign in',
+                      'Register',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
@@ -142,16 +112,10 @@ class _SignInState extends State<SignIn> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Don't have an account?"),
-                      TextButton(
-                          onPressed: () {
-                            widget.toggleView();
-                          },
-                          child: Text(
-                            'Register',
-                            style: TextStyle(
-                                color: Colors.brown.shade800, fontSize: 16),
-                          ))
+                      Text("Have an account?"),
+                      TextButton(onPressed: (){
+                        widget.toggleView();
+                      }, child: Text("Sign In", style: TextStyle(color: Colors.brown.shade800, fontSize: 16),))
                     ],
                   )
                 ],

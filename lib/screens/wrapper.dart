@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'package:brew_crew/models/user.dart';
 import 'package:brew_crew/screens/authenticate/authenticate.dart';
+import 'package:brew_crew/screens/home/home.dart';
+
 
 class Wrapper extends StatelessWidget {
   const Wrapper({super.key});
@@ -11,8 +13,12 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
     print('In user :  ${user}');
+
     //return either home or authenticate widget
-    
-    return Authenticate();
+    if (user == null) {
+      return Authenticate();
+    }else{
+      return Home();
+    }
   }
 }
