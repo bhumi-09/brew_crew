@@ -1,10 +1,14 @@
+import 'package:brew_crew/screens/home/home.dart';
 import 'package:brew_crew/services/auth.dart';
+import 'package:brew_crew/widgets/elevatedButton.dart';
+import 'package:brew_crew/widgets/snackBar.dart';
+import 'package:brew_crew/widgets/textFormField.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
- final Function toggleView;
+  final Function toggleView;
 
-   const Register({super.key, required this.toggleView});
+  const Register({super.key, required this.toggleView});
 
   @override
   State<Register> createState() => _RegisterState();
@@ -39,15 +43,10 @@ class _RegisterState extends State<Register> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: 30),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      hintText: 'Enter your email',
-                      prefixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                  CustomTextFormField(
+                    labelText: 'Email',
+                    hintText: 'Enter your email',
+                    prefixIcon: Icons.email,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
                         return 'Please enter your email';
@@ -63,16 +62,11 @@ class _RegisterState extends State<Register> {
                     },
                   ),
                   SizedBox(height: 30),
-                  TextFormField(
+                  CustomTextFormField(
+                    labelText: 'Password',
+                    hintText: 'Enter your password',
                     obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Enter your password',
-                      prefixIcon: Icon(Icons.lock),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                    prefixIcon: Icons.lock,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
                         return 'Please enter your password';
@@ -88,34 +82,39 @@ class _RegisterState extends State<Register> {
                     },
                   ),
                   SizedBox(height: 40),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.brown,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                  CustomElevatedButton(
+                    text: 'Register',
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        print(email);
-                        print(password);
+                        dynamic result = await _auth
+                            .registerWithEmailAndPassword(email, password);
+
+                        if (result == null) {
+                          // print('Error while register');
+                          AppSnackBar.showError(
+                              context, 'Please provide valid data');
+                        } else {
+                          // print('Register successfully $result');
+                          AppSnackBar.showSuccess(
+                              context, 'Register successfully');
+                        }
                       }
                     },
-                    child: Text(
-                      'Register',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
                   ),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Have an account?"),
-                      TextButton(onPressed: (){
-                        widget.toggleView();
-                      }, child: Text("Sign In", style: TextStyle(color: Colors.brown.shade800, fontSize: 16),))
+                      TextButton(
+                          onPressed: () {
+                            widget.toggleView();
+                          },
+                          child: Text(
+                            "Sign In",
+                            style: TextStyle(
+                                color: Colors.brown.shade800, fontSize: 16),
+                          ))
                     ],
                   )
                 ],

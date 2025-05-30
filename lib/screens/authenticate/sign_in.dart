@@ -1,4 +1,7 @@
 import 'package:brew_crew/services/auth.dart';
+import 'package:brew_crew/widgets/elevatedButton.dart';
+import 'package:brew_crew/widgets/snackBar.dart';
+import 'package:brew_crew/widgets/textFormField.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -69,15 +72,10 @@ class _SignInState extends State<SignIn> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: 30),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      hintText: 'Enter your email',
-                      prefixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                  CustomTextFormField(
+                    labelText: 'Email',
+                    hintText: 'Enter your email',
+                    prefixIcon: Icons.email,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
                         return 'Please enter your email';
@@ -93,16 +91,11 @@ class _SignInState extends State<SignIn> {
                     },
                   ),
                   SizedBox(height: 30),
-                  TextFormField(
+                  CustomTextFormField(
+                    labelText: 'Password',
+                    hintText: 'Enter your password',
                     obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Enter your password',
-                      prefixIcon: Icon(Icons.lock),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                    prefixIcon: Icons.lock,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
                         return 'Please enter your password';
@@ -118,25 +111,24 @@ class _SignInState extends State<SignIn> {
                     },
                   ),
                   SizedBox(height: 40),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.brown,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                  CustomElevatedButton(
+                    text: 'Sign in',
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        print(email);
-                        print(password);
+                        dynamic result = await _auth.signInWithEmailAndPassword(
+                            email, password);
+
+                        if (result == null) {
+                          // print('Error while sign in');
+                          AppSnackBar.showError(
+                              context, 'Please provide valid credentials');
+                        } else {
+                          // print('Signed in successfully $result');
+                          AppSnackBar.showSuccess(
+                              context, 'Signed in successfully');
+                        }
                       }
                     },
-                    child: Text(
-                      'Sign in',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
                   ),
                   SizedBox(height: 10),
                   Row(
