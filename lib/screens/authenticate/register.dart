@@ -1,6 +1,6 @@
-import 'package:brew_crew/screens/home/home.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:brew_crew/widgets/elevatedButton.dart';
+import 'package:brew_crew/widgets/loader.dart';
 import 'package:brew_crew/widgets/snackBar.dart';
 import 'package:brew_crew/widgets/textFormField.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,8 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+
+  bool loading = false;
 
   //text field state
   String email = '';
@@ -35,7 +37,7 @@ class _RegisterState extends State<Register> {
           ),
           centerTitle: true,
         ),
-        body: Container(
+        body:loading ? Loading() :  Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: Form(
               key: _formKey,
@@ -86,15 +88,16 @@ class _RegisterState extends State<Register> {
                     text: 'Register',
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        setState(() => loading = true);
+
                         dynamic result = await _auth
                             .registerWithEmailAndPassword(email, password);
 
                         if (result == null) {
-                          // print('Error while register');
+                          setState(() => loading = false);
                           AppSnackBar.showError(
                               context, 'Please provide valid data');
                         } else {
-                          // print('Register successfully $result');
                           AppSnackBar.showSuccess(
                               context, 'Register successfully');
                         }

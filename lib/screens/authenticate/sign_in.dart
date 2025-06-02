@@ -1,5 +1,6 @@
 import 'package:brew_crew/services/auth.dart';
 import 'package:brew_crew/widgets/elevatedButton.dart';
+import 'package:brew_crew/widgets/loader.dart';
 import 'package:brew_crew/widgets/snackBar.dart';
 import 'package:brew_crew/widgets/textFormField.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+
+  bool loading = false;
 
   //text field state
   String email = '';
@@ -34,7 +37,7 @@ class _SignInState extends State<SignIn> {
           ),
           centerTitle: true,
         ),
-        body: Container(
+        body:loading ? Loading() : Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             //   child: ElevatedButton(
             //       onPressed: () async {
@@ -115,15 +118,15 @@ class _SignInState extends State<SignIn> {
                     text: 'Sign in',
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        setState(() => loading = true);
                         dynamic result = await _auth.signInWithEmailAndPassword(
                             email, password);
 
                         if (result == null) {
-                          // print('Error while sign in');
+                          setState(() => loading = false);
                           AppSnackBar.showError(
                               context, 'Please provide valid credentials');
                         } else {
-                          // print('Signed in successfully $result');
                           AppSnackBar.showSuccess(
                               context, 'Signed in successfully');
                         }
